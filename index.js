@@ -109,7 +109,7 @@ function tagPaths(paths, tag) {
  */
 function tagTemp(urls, basePath) {
     let template =
-        `import request from '@/utils/request'  \nconst basePath='${basePath} \n'`;
+        `import request from '@/utils/request'  \nconst basePath='${basePath}' \n`;
                 urls.forEach(e => {
                     Object.keys(e).forEach(j => {
                         let obj = e[j]
