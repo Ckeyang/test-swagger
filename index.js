@@ -134,13 +134,7 @@ function tagTemp(urls, basePath) {
                              query = j == 'get' ? 'params' : 'data'
                         }
                         template +=
-                            `// ${obj.summary} 
-                            export function ${name}(${query}) {  
-                            return request({    
-                                url:\`${obj.url}\`,    
-                                method:'${j}',    
-                                ${body}  
-                            })}`
+                            `// ${obj.summary}\nexport function ${name}(${query}) {  \nreturn request({    \nurl:\`${obj.url}\`,    \nmethod:'${j}',\n${body}  \n})}`
                     })
                 })
     return template;
@@ -149,7 +143,10 @@ function tagTemp(urls, basePath) {
 function mkdirsSync(dirpath) {
     try {
         if (!fs.existsSync(dirpath)) {
-            fs.mkdirSync(path.join(dirpath))
+            if (mkdirsSync(path.dirname(dirpath))) {
+                fs.mkdirSync(dirpath);
+                return true;
+            }
         }
         return true
     } catch (e) {
@@ -188,6 +185,5 @@ function repeatConfirm(choices) {
             })
         })
     }}
-// run();
 // test();
 module.exports = main
