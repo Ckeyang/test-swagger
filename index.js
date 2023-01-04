@@ -93,7 +93,7 @@ function tagPaths(paths, tag) {
     Object.keys(paths).forEach(e => {
         Object.keys(paths[e]).forEach(j => {
             if (paths[e][j] && paths[e][j].tags[0] == tag) {
-                paths[e][j].url = '${basePath}' + e.replace(/{/, "${");
+                paths[e][j].url = e.replace(/{/, "${");
                 tagPaths.push(paths[e]);
             }
         })
@@ -109,7 +109,7 @@ function tagPaths(paths, tag) {
  */
 function tagTemp(urls, basePath) {
     let template =
-        `import request from '@/utils/request'  \nconst basePath='${basePath}' \n`;
+        `import request from '@/utils/request'\n`;
                 urls.forEach(e => {
                     Object.keys(e).forEach(j => {
                         let obj = e[j]
