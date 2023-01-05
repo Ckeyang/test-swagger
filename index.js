@@ -5,11 +5,12 @@ const path = require("path");
 const colors = require('colors');
 const axios = require('axios');
 //启动函数
-async function main(URL='',PATH='') {
+async function main(URL='',PATH='',FILETYPE='js') {
     console.log(`读取json数据......`.yellow)
     const params =await getParams();
     const url = URL || params.get('url');//请求json地址
     const apiPath = PATH || params.get('apiPath')||'/';//存放api文件地址
+    const fileType = FILETYPE || params.get('fileType')||'/';//存放api文件地址
     const choices = [];//存储所有重复性文件
     const res = await getData(url)
     console.log('res========'.yellow)
@@ -29,7 +30,7 @@ async function main(URL='',PATH='') {
         let e = answers[i];
         const urls = tagPaths(paths, e);
         const tpl = tagTemp(urls, basePath)
-        tagFiles(apiPath, tpl, e, choices)
+        tagFiles(apiPath, tpl, e, choices,fileType)
     }
     repeatConfirm(choices);
 }
@@ -154,14 +155,14 @@ function mkdirsSync(dirpath) {
         return false
     }}
 //把单个tag tpl模板生成文件
-async function tagFiles(apiPath, tpl, fileName, choices) {
+async function tagFiles(apiPath, tpl, fileName, choices,fileType) {
     let fPath = process.cwd() + '/' + apiPath;  //生成目录
     if (!fs.existsSync(fPath)) {
         mkdirsSync(fPath)
         console.log(`创建api目录成功：${fPath}`.green)
     }
     // 要生成的文件完整路径
-    fPath +=  fileName + '.js'
+    fPath +=  fileName + '.' + fileType
     const ex = fs.existsSync(fPath)
     if (ex) {
         choices.push({ name: fPath, value: { tpl: tpl, path: fPath } })
