@@ -8,9 +8,10 @@
     1.0.6 优化 多层文件夹的情况
     1.0.8 优化
     1.0.10 支持ts
+    1.0.12 支持配置request路径
 
 ## code
 
     const main = require('ckeyang-test-swagger')
-    main('http://124.70.150.250:9007/v3/api-docs','./api/','ts'); // 默认js
+    main('http://124.70.150.250:9007/v3/api-docs','./api/','ts','@/plugin/axios'); // 默认js
 

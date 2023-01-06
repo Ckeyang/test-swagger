@@ -5,12 +5,13 @@ const path = require("path");
 const colors = require('colors');
 const axios = require('axios');
 //启动函数
-async function main(URL='',PATH='',FILETYPE='js') {
+async function main(URL='',PATH='',FILETYPE='js',REQUESTURL='@/utils/request') {
     console.log(`读取json数据......`.yellow)
     const params =await getParams();
     const url = URL || params.get('url');//请求json地址
     const apiPath = PATH || params.get('apiPath')||'/';//存放api文件地址
     const fileType = FILETYPE || params.get('fileType')||'/';//存放api文件地址
+    const requestUrl = REQUESTURL || params.get('requestUrl')||'/';//存放api文件地址
     const choices = [];//存储所有重复性文件
     const res = await getData(url)
     console.log('res========'.yellow)
@@ -29,7 +30,7 @@ async function main(URL='',PATH='',FILETYPE='js') {
     for(let i=0;i<answers.length;i++){
         let e = answers[i];
         const urls = tagPaths(paths, e);
-        const tpl = tagTemp(urls, basePath,fileType)
+        const tpl = tagTemp(urls, basePath,fileType,requestUrl)
         tagFiles(apiPath, tpl, e, choices,fileType)
     }
     repeatConfirm(choices);
@@ -77,11 +78,12 @@ function tagPaths(paths, tag) {
  * @param urls
  * @param basePath
  * @param fileType
+ * @param requestUrl
  * @returns {string}
  */
-function tagTemp(urls, basePath,fileType) {
+function tagTemp(urls, basePath,fileType,requestUrl) {
     let template =
-        `import request from '@/utils/request'\n`;
+        `import request from '${requestUrl}'\n`;
                 urls.forEach(e => {
                     Object.keys(e).forEach(j => {
                         let obj = e[j]
@@ -106,7 +108,7 @@ function tagTemp(urls, basePath,fileType) {
                              query = j == 'get' ? 'params' : 'data'
                         }
                         template +=
-                            `// ${obj.summary}\nexport function ${name}(${query}${fileType=='ts'?':any':''}) {  \nreturn request({    \nurl:\`${obj.url}\`,    \nmethod:'${j}',\n${body}  \n})}`
+                            `// ${obj.summary}\nexport function ${name}(${query}${fileType=='ts'?'?:any':''}) {  \nreturn request({    \nurl:\`${obj.url}\`,    \nmethod:'${j}',\n${body}  \n})}`
                     })
                 })
     return template;
