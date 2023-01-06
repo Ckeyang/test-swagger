@@ -10,6 +10,11 @@
     1.0.10 支持ts
     1.0.12 支持配置request路径
 
+## 引入方式
+    
+    npm install ckeyang-test-swagger --save
+    yarn add ckeyang-test-swagger
+
 ## code
 
     const main = require('ckeyang-test-swagger')
